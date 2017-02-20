@@ -36,17 +36,15 @@ class Player1:
             for chosen in cells :
                 board.update(old_move, chosen, flag)
                 tmp1 = self.alphaBeta(board, chosen, new, depth+1, alpha, beta)
+                board.board_status[chosen[0]][chosen[1]] = '-'
+                board.block_status = copy.deepcopy(tmp)
+                
                 if(nodeVal[0] < tmp1[0]):
                     nodeVal = tmp1
                     alpha = max(alpha, nodeVal[0])
                     if beta <= alpha :
                         break
-                board.board_status[chosen[0]][chosen[1]] = '-'
-                board.block_status = copy.deepcopy(tmp)
                 del(tmp1)
-                
-            board.board_status[chosen[0]][chosen[1]] = '-'
-            board.block_status = copy.deepcopy(tmp)
             del(tmp)
                 
             return nodeVal
@@ -61,17 +59,15 @@ class Player1:
             for chosen in cells :
                 board.update(old_move, chosen, flag)
                 tmp1 = self.alphaBeta(board, chosen, new, depth+1, alpha, beta)
+                board.board_status[chosen[0]][chosen[1]] = '-'
+                board.block_status = copy.deepcopy(tmp)
+                
                 if(nodeVal[0] > tmp1[0]):
                     nodeVal = tmp1
                     beta = min(beta, nodeVal[0])
                     if beta <= alpha :
                         break
-                board.board_status[chosen[0]][chosen[1]] = '-'
-                board.block_status = copy.deepcopy(tmp)
                 del(tmp1)
-                
-            board.board_status[chosen[0]][chosen[1]] = '-'
-            board.block_status = copy.deepcopy(tmp)
             del(tmp)
                 
             return nodeVal
