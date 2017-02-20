@@ -2,12 +2,13 @@
 #player 1 -1
 from __future__ import print_function
 import copy
+import random
 
 class Player1:
 
     def __init__(self):
         self.termVal = 100
-        self.limit = 2
+        self.limit = 4
         self.count = 0
 
     def heuristic(self, old_move):
@@ -26,7 +27,9 @@ class Player1:
             return self.heuristic(old_move)
         
         cells = board.find_valid_move_cells(old_move)
-
+        random.shuffle(cells)
+        #print (cells)
+        
         if (flag == 'x'):
             
             nodeVal = -5*self.termVal, (-1,-1)
@@ -40,7 +43,7 @@ class Player1:
                 board.block_status = copy.deepcopy(tmp)
                 
                 if(nodeVal[0] < tmp1[0]):
-                    nodeVal = tmp1
+                    nodeVal = tmp1[0], chosen
                     alpha = max(alpha, nodeVal[0])
                     if beta <= alpha :
                         break
@@ -63,7 +66,7 @@ class Player1:
                 board.block_status = copy.deepcopy(tmp)
                 
                 if(nodeVal[0] > tmp1[0]):
-                    nodeVal = tmp1
+                    nodeVal = tmp1[0], chosen
                     beta = min(beta, nodeVal[0])
                     if beta <= alpha :
                         break
