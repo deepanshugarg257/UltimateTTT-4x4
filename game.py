@@ -8,7 +8,7 @@ class Player1:
 
     def __init__(self):
         self.termVal = 100
-        self.limit = 4
+        self.limit = 5
         self.count = 0
 
     def heuristic(self, old_move):

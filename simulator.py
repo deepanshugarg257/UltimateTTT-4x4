@@ -3,7 +3,7 @@ import random
 import signal
 import time
 import copy
-from game import Player1
+from withMtdf import Player1
 
 class TimedOutExc(Exception):
 	pass
