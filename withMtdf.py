@@ -12,8 +12,8 @@ class pl2:
         self.termVal = 10000000
         self.limit = 5
         self.count = 0
-        self.weight = [3,2,2,3,2,3,3,2,2,3,3,2,3,2,2,3]
-        self.dict = {'x':1,'o':-1,'-':0,'d':0}
+        self.weight = [3, 2, 2, 3, 2, 3, 3, 2, 2, 3, 3, 2, 3, 2, 2, 3]
+        self.dict = {'x':1, 'o':-1, '-':0, 'd':0}
         self.trans = {}
         self.timeLimit = datetime.timedelta(seconds = 14)
         self.begin = INFINITY
@@ -22,8 +22,8 @@ class pl2:
     def evaluate(self,board,blx,bly):
         # print("Calculating for block ",blx, " " , bly)
         val = 0
-        rowCnt = [3,3,3,3]
-        colCnt = [3,3,3,3]
+        rowCnt = [3, 3, 3, 3]
+        colCnt = [3, 3, 3, 3]
         for i in xrange(4):
             for j in xrange(4):
                 mark = board.board_status[4*blx+i][4*bly+j]
@@ -48,7 +48,7 @@ class pl2:
             if(colCnt[i]!=3):
                 val+=colCnt[i]
 
-        diag1,diag2 = 3,3
+        diag1, diag2 = 3, 3
         for i in xrange(4):
                 mark = board.block_status[i][i]
                 dictVal = self.dict[mark]
@@ -73,13 +73,13 @@ class pl2:
             if(diag2!=3):
                 val+=diag2
 
-        # print("val is ",val)
+        # print("val is ", val)
         return val
 
-    def blockEval(self,board):
+    def blockEval(self, board):
         val = 0
-        rowCnt = [3,3,3,3]
-        colCnt = [3,3,3,3]
+        rowCnt = [3, 3, 3, 3]
+        colCnt = [3, 3, 3, 3]
         for i in xrange(4):
             for j in xrange(4):
                 mark = board.block_status[i][j]
@@ -103,7 +103,7 @@ class pl2:
             if(colCnt[i]!=3):
                 val+=colCnt[i]
 
-        diag1,diag2 = 3,3
+        diag1, diag2 = 3, 3
         for i in xrange(4):
                 mark = board.block_status[i][i]
                 if(mark!='-'):
@@ -136,7 +136,7 @@ class pl2:
         # print("Calculating heur")
         for i in xrange(4):
             for j in xrange(4):
-                final += self.evaluate(board,i,j)
+                final += self.evaluate(board, i, j)
         final += self.blockEval(board)*15
         # return (50, old_move)
         # print("final is ",final)
@@ -149,24 +149,24 @@ class pl2:
             # print("hash exists")
             bounds = self.trans[hashval]
             if(bounds[0] >= beta):
-                return bounds[0],old_move
+                return bounds[0], old_move
             if(bounds[1] <= alpha):
-                return bounds[1],old_move
+                return bounds[1], old_move
             # print("also returning")
-            alpha = max(alpha,bounds[0])
-            beta = min(beta,bounds[1])
+            alpha = max(alpha, bounds[0])
+            beta = min(beta, bounds[1])
 
         # print(len(cells), ": length of cells")
-        # print("old move is ",old_move,hashval)
-        # nodeVal = 0,cells[0]
+        # print("old move is ", old_move, hashval)
+        # nodeVal = 0, cells[0]
         # beta = b
         # alpha = a
         #
         # if(board.find_terminal_state()[0] == 'x'):
-        #     nodeVal = self.termVal, old_move
+        #     nodeVal = self.termVal,  old_move
         #
         # elif(board.find_terminal_state()[0] == 'o'):
-        #     nodeVal = -1*self.termVal, old_move
+        #     nodeVal = -1*self.termVal,  old_move
         #
         # elif(self.trans.has_key(hashval)):
         #     bounds = self.trans[hashval]
@@ -174,15 +174,15 @@ class pl2:
         #         return bounds[0]
         #     if(bounds[1] <= a):
         #         return bounds[1]
-        #     a = max(a,bounds[0])
-        #     b = min(b,bounds[1])
+        #     a = max(a, bounds[0])
+        #     b = min(b, bounds[1])
 
         # if(board.find_terminal_state()[0] == 'NONE' or depth > self.limit):
         #     print("while returning heur")
         #     # board.print_board()
         #     heurVal = self.heuristic(board)
-        #     print("final returned as ",heurVal)
-        #     nodeVal = heurVal,old_move
+        #     print("final returned as ", heurVal)
+        #     nodeVal = heurVal, old_move
         #     print("hello")
 
         # random.shuffle(cells)
@@ -199,7 +199,7 @@ class pl2:
 
             for chosen in cells :
                 if datetime.datetime.utcnow() - self.begin >= self.timeLimit :
-                    print("breaking at depth ",depth)
+                    print("breaking at depth ", depth)
                     self.limitReach = 1
                     break
                 board.update(old_move, chosen, flag)
@@ -207,7 +207,7 @@ class pl2:
                 if (board.find_terminal_state()[0] == 'x'):
                     board.board_status[chosen[0]][chosen[1]] = '-'
                     board.block_status = copy.deepcopy(tmp)
-                    nodeVal = self.termVal,chosen
+                    nodeVal = self.termVal, chosen
                     break
                 elif (board.find_terminal_state()[0] == 'o'):
                     board.board_status[chosen[0]][chosen[1]] = '-'
@@ -220,7 +220,7 @@ class pl2:
                 board.board_status[chosen[0]][chosen[1]] = '-'
                 board.block_status = copy.deepcopy(tmp)
                 if(nodeVal[0] < tmp1):
-                    nodeVal = tmp1,chosen
+                    nodeVal = tmp1, chosen
                 # print("hi nodeval ",nodeVal)
                 a = max(a, tmp1)
                 if beta <= nodeVal[0] :
@@ -239,11 +239,11 @@ class pl2:
                     self.limitReach = 1
                     break
                 board.update(old_move, chosen, flag)
-                # print("chosen ",chosen)
+                # print("chosen ", chosen)
                 if(board.find_terminal_state()[0] == 'o'):
                     board.board_status[chosen[0]][chosen[1]] = '-'
                     board.block_status = copy.deepcopy(tmp)
-                    nodeVal = -1*self.termVal,chosen
+                    nodeVal = -1*self.termVal, chosen
                     break
                 elif(board.find_terminal_state()[0] == 'x'):
                     board.board_status[chosen[0]][chosen[1]] = '-'
@@ -256,30 +256,30 @@ class pl2:
                 board.board_status[chosen[0]][chosen[1]] = '-'
                 board.block_status = copy.deepcopy(tmp)
                 if(nodeVal[0] > tmp1):
-                    nodeVal = tmp1,chosen
+                    nodeVal = tmp1, chosen
                 b = min(b, tmp1)
                 if alpha >= nodeVal[0] :
                     break
             del(tmp)
 
-        # print("return value is ",nodeVal)
+        # print("return value is ", nodeVal)
         if(nodeVal[0] <= alpha):
-            self.trans[hashval] = [-INFINITY,nodeVal[0]]
+            self.trans[hashval] = [-INFINITY, nodeVal[0]]
         if(nodeVal[0] > alpha and nodeVal[0] < beta):
-            self.trans[hashval] = [nodeVal[0],nodeVal[0]]
+            self.trans[hashval] = [nodeVal[0], nodeVal[0]]
         if(nodeVal[0]>=beta):
-            self.trans[hashval] = [nodeVal[0],INFINITY]
+            self.trans[hashval] = [nodeVal[0], INFINITY]
         # print(self.trans.items())
         return nodeVal
 
-    def mtd(self,board,old_move,flag,depth,f):
+    def mtd(self, board, old_move, flag, depth, f):
         g = f
         upperbound = INFINITY
         lowerbound = -INFINITY
         while(lowerbound<upperbound):
-            # print("new mtd ",lowerbound,upperbound)
-            b = max(g,lowerbound+1)
-            tmp = self.alphaBeta(board,old_move,flag,depth,b-1,b)
+            # print("new mtd ", lowerbound, upperbound)
+            b = max(g, lowerbound+1)
+            tmp = self.alphaBeta(board, old_move, flag, depth, b-1, b)
             if datetime.datetime.utcnow() - self.begin >= self.timeLimit :
                 print("breaking_end")
                 self.limitReach = 1
@@ -301,16 +301,16 @@ class pl2:
         # print(self.trans.items())
         print("entering the move for ", self.count)
         toret = board.find_valid_move_cells(old_move)[0]
-        for i in xrange(3,100):
+        for i in xrange(2, 2):
             self.trans.clear()
             self.limit = i
-            print("in depth ",i)
-            getval = self.mtd(board,old_move,flag,1,-INFINITY)[1]
-            print("returned from depth ",i)
+            print("in depth ", i)
+            getval = self.mtd(board, old_move, flag, 1, -INFINITY)[1]
+            print("returned from depth ", i)
             if(self.limitReach == 0):
                 toret = getval
             else:
                 break
         # toret = self.alphaBeta(board, old_move, flag, 1, -10000000, 10000000)[1]
-        print("toret",toret)
+        print("toret", toret)
         return toret[0], toret[1]
