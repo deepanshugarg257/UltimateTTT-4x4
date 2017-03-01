@@ -6,7 +6,7 @@ import random
 import datetime
 
 INFINITY = 1e10
-class Player1:
+class pl2:
 
     def __init__(self):
         self.termVal = 10000000
@@ -17,6 +17,7 @@ class Player1:
         self.trans = {}
         self.timeLimit = datetime.timedelta(seconds = 14)
         self.begin = INFINITY
+        self.limitReach = 0
 
     def evaluate(self,board,blx,bly):
         # print("Calculating for block ",blx, " " , bly)
@@ -31,12 +32,12 @@ class Player1:
                 if(dictVal!=0):
                     val+=dictVal*self.weight[4*i+j]
                     if (rowCnt[i]==3):
-                        rowCnt[i] = dictVal*5
+                        rowCnt[i] = dictVal*10
                     elif(dictVal*rowCnt[i]<0):
                         rowCnt[i] = 0
                     rowCnt[i]+=rowCnt[i]
                     if (colCnt[j]==3):
-                        colCnt[j] = dictVal*5
+                        colCnt[j] = dictVal*10
                     elif(dictVal*colCnt[j]<0):
                         colCnt[j] = 0
                     colCnt[j]+=colCnt[j]
@@ -53,7 +54,7 @@ class Player1:
                 dictVal = self.dict[mark]
                 if(dictVal!=0):
                     if(diag1==3):
-                        diag1 = dictVal*5
+                        diag1 = dictVal*10
                     elif(dictVal*diag1<0):
                         diag1 = 0
                     diag1+=diag1
@@ -61,7 +62,7 @@ class Player1:
                 dictVal = self.dict[mark]
                 if(dictVal!=0):
                     if(diag2==3):
-                        diag2 = dictVal*5
+                        diag2 = dictVal*10
                     elif(dictVal*diag2<0):
                         diag2 = 0
                     diag2+=diag2
@@ -188,7 +189,7 @@ class Player1:
         # print(cells)
 
         cells = board.find_valid_move_cells(old_move)
-        # random.shuffle(cells) 
+        random.shuffle(cells)
         # print(len(cells), ": length of cells")
         if (flag == 'x'):
             nodeVal = -INFINITY, cells[0]
@@ -198,7 +199,9 @@ class Player1:
 
             for chosen in cells :
                 if datetime.datetime.utcnow() - self.begin >= self.timeLimit :
-                  break
+                    print("breaking at depth ",depth)
+                    self.limitReach = 1
+                    break
                 board.update(old_move, chosen, flag)
                 # print("chosen ",chosen)
                 if (board.find_terminal_state()[0] == 'x'):
@@ -232,7 +235,9 @@ class Player1:
 
             for chosen in cells :
                 if datetime.datetime.utcnow() - self.begin >= self.timeLimit :
-                  break
+                    print("breaking")
+                    self.limitReach = 1
+                    break
                 board.update(old_move, chosen, flag)
                 # print("chosen ",chosen)
                 if(board.find_terminal_state()[0] == 'o'):
@@ -275,6 +280,10 @@ class Player1:
             # print("new mtd ",lowerbound,upperbound)
             b = max(g,lowerbound+1)
             tmp = self.alphaBeta(board,old_move,flag,depth,b-1,b)
+            if datetime.datetime.utcnow() - self.begin >= self.timeLimit :
+                print("breaking_end")
+                self.limitReach = 1
+                break
             g = tmp[0]
             # print(g)
             if(g<b):
@@ -287,10 +296,21 @@ class Player1:
         # print("hey")
         self.begin = datetime.datetime.utcnow()
         self.count += 1
+        self.limitReach = 0
         self.trans.clear()
-        print(self.trans.items())
+        # print(self.trans.items())
         print("entering the move for ", self.count)
-        toret = self.mtd(board,old_move,flag,1,-INFINITY)[1]
+        toret = board.find_valid_move_cells(old_move)[0]
+        for i in xrange(3,100):
+            self.trans.clear()
+            self.limit = i
+            print("in depth ",i)
+            getval = self.mtd(board,old_move,flag,1,-INFINITY)[1]
+            print("returned from depth ",i)
+            if(self.limitReach == 0):
+                toret = getval
+            else:
+                break
         # toret = self.alphaBeta(board, old_move, flag, 1, -10000000, 10000000)[1]
         print("toret",toret)
         return toret[0], toret[1]
