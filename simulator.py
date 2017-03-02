@@ -4,6 +4,7 @@ import signal
 import time
 import copy
 from withMtdf import Player1
+from P4 import player4
 
 class TimedOutExc(Exception):
 	pass
@@ -316,7 +317,7 @@ if __name__ == '__main__':
 
 	elif option == '2':
 		obj1 = Player1()
-		obj2 = Random_Player()
+		obj2 = player4()
 	elif option == '3':
 		obj1 = Manual_Player()
 		obj2 = Manual_Player()
