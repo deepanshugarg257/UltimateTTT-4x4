@@ -3,8 +3,7 @@ import random
 import signal
 import time
 import copy
-from withMtdf import Player1
-from P4 import player4
+from tosubmit1 import Player1
 
 class TimedOutExc(Exception):
 	pass
@@ -312,12 +311,11 @@ if __name__ == '__main__':
 	obj2 = ''
 	option = sys.argv[1]
 	if option == '1':
-		obj1 = Random_Player()
+		obj1 = Player78()
 		obj2 = Random_Player()
-
 	elif option == '2':
-		obj1 = Player1()
-		obj2 = player4()
+		obj1 = Random_Player()
+		obj2 = Player78()
 	elif option == '3':
 		obj1 = Manual_Player()
 		obj2 = Manual_Player()
